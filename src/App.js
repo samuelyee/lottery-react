@@ -1,9 +1,16 @@
+import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import web3 from './web3';
 
 function App() {
+
+  useEffect(()=>{
+    console.log(web3.version);    
+  });
+
   return (
-    <div className="App">
+    <div className="App">   
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
