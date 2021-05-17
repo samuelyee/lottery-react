@@ -1,30 +1,30 @@
 import React, { useEffect, useState } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import lottery from './lottery';
 import web3 from './web3';
 
 function App() {
+  const [manager, setManager] = useState('');
+  const [players, setPlayers] = useState([]);
+  const [balance, setBalance] = useState(0);
 
-  useEffect(()=>{
-    console.log(web3.version);    
-  });
+  useEffect(()=>{    
+    const callManager = async () => {      
+      setManager(await lottery.methods.manager().call());      
+      setPlayers(await lottery.methods.getPlayers().call());
+      setBalance(await web3.eth.getBalance(lottery.options.address));
+    };    
+    callManager();
+  }, [manager]);
 
   return (
     <div className="App">   
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h2> Lottery Contract </h2>
+      <p> This contract is managed by {manager} </p>
+      <p>
+        There are currently {players.length} people entered, 
+        competing to win {`${web3.utils.fromWei(balance)}`} ether!
+      </p>
     </div>
   );
 }
